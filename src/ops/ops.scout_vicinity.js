@@ -1,5 +1,6 @@
 module.exports = {
     scout_timeout: 100,
+    recent_intel_skip: 3000,
     run: function(ops)
     {
         this.init(ops);
@@ -30,6 +31,13 @@ module.exports = {
         //skip own room scouting
         var room = Game.rooms[target];
         if (room && room.controller && room.controller.my) {
+            ops.mem.nearby_id++;
+            return;
+        }
+        
+        //check recently scouted
+        var intel = Intel.getIntel(target);
+        if (intel && intel.time + this.recent_intel_skip > Game.time) {
             ops.mem.nearby_id++;
             return;
         }
