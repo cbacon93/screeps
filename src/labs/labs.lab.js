@@ -36,18 +36,28 @@ module.exports = {
                 if (!source) return;
                 let avbl_amount = source.store[mem.mineralType];
                 let needed_amount = mem.amount - amount;
-                //check enough minerals for lab ops?
-                //otherwise: wait for buy/tx ops to finish
-                if (avbl_amount < needed_amount) return;
                 
-                //tx mineral to lab
-                moduleLogistics.addTransportTask(
-                    lab.room, 
-                    lab.room.terminal, 
-                    lab, 
-                    needed_amount, 
-                    mem.mineralType
-                );
+                //not enough materials for ops - buy
+                //otherwise: start transport task
+                if (avbl_amount < needed_amount) 
+                {
+                    //buy materials
+                    var bi = _.findIndex(lab.room.memory.buy_list, (s) => s.res == mem.mineralType);
+                    if (bi < 0) {
+                        let missing_amount = needed_amount - avbl_amount;
+                        Terminal.addBuyList(lab.room, mem.mineralType, missing_amount);
+                    }
+                    
+                } else {
+                    //tx mineral to lab
+                    moduleLogistics.addTransportTask(
+                        lab.room, 
+                        lab.room.terminal, 
+                        lab, 
+                        needed_amount, 
+                        mem.mineralType
+                    );
+                }
             } 
             else if (amount >= mem.amount)
             {
