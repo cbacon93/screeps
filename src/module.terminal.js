@@ -128,4 +128,5 @@ module.exports = {
             buy.max_price += 0.01;
         }
     },
+    
 };

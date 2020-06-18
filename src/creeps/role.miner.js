@@ -65,7 +65,7 @@ module.exports = {
     harvest: function(creep, source, container, link)
     {
         //source depleted - time to renew?
-        if (creep.ticksToLive <= CREEP_LIFE_TIME/3) {
+        if (creep.ticksToLive <= ENERGY_REGEN_TIME+100) {
             if (source.energy == 0 && source.ticksToRegeneration >= 50) {
                 creep.memory.renewSelf = true;
             }

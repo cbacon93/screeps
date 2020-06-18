@@ -114,7 +114,7 @@ module.exports =  {
             
             //calc haulers
             var currentBodySize = Math.min(baseCreep.getSuitableBodySize("", room.energyAvailable), 5);
-            var haulerNeeded = Math.round(room.memory.stats.transports_1k_30 / (currentBodySize*100) / 2);
+            var haulerNeeded = Math.round(room.memory.stats.transports_1k_30 / (currentBodySize*100));
             haulerNeeded = Math.max(Math.min(haulerNeeded, 5), 1);
             
             if (room.memory.stats.haulers_needed < haulerNeeded) {

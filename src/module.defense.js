@@ -238,7 +238,7 @@ module.exports = {
 		for (var i in room.memory.hostiles)
 		{
 			var c = Game.getObjectById(room.memory.hostiles[i].creep);
-			if (!c || c.room != room.name) {
+			if (!c || c.room.name != room.name) {
 				room.memory.hostiles.splice(i, 1);
 				return;
 			}
