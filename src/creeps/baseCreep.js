@@ -399,7 +399,7 @@ module.exports = {
 		//room status not equal - blocked
 		var fstatus = Game.map.getRoomStatus(fromRoomName);
 		var tstatus = Game.map.getRoomStatus(rname);
-		if (fstatus != tstatus) {
+		if (fstatus.status != tstatus.status) {
 			return Infinity;
 		}
 		
