@@ -13,7 +13,10 @@ module.exports = {
         this.attackTimeout(ops);
         
         // OWN ROOM - SKIP
-        if (Game.rooms[ops.target] && Game.rooms[ops.target].controller && Game.rooms[ops.target].my) {
+        if (Game.rooms[ops.target] && 
+            Game.rooms[ops.target].controller && 
+            Game.rooms[ops.target].controller.my) 
+        {
             console.log("Ops.Harvest: Own room. Aborting");
             ops.finished = true;
             return;
@@ -31,6 +34,7 @@ module.exports = {
         if (!Memory.intel || !Memory.intel.list || !Memory.intel.list[ops.target]) 
         {
             Ops.new("scout", ops.source, ops.target);
+            ops.mem.status = "scouting";
             return;
         }
         var intel = Memory.intel.list[ops.target];
@@ -44,6 +48,7 @@ module.exports = {
         if (intel.threat == "core") {
             //core in room - wait until gone
             ops.mem.timeout = Game.time + this.core_timeout;
+            ops.mem.status = "idle core";
             return;
         }
         
@@ -61,11 +66,12 @@ module.exports = {
         // DEPOSITS AND MINERALS ONLY ON >LVL 6 SOURCE ROOMS
         if (Game.rooms[ops.source].controller.level >= 6) {
             // PICK Deposits
-            if (intel.deposits && intel.deposits_cooldown < 10) {
+            if (intel.deposits && intel.deposits_cooldown < 20) {
                 let h = _.findIndex(roomhvstr, (s) => s.source_type == 'deposit' );
                 if (h < 0) {
                     //spawn harvester
                     moduleSpawn.addSpawnList(Game.rooms[ops.source], "harvester", {troom: ops.target});
+                    ops.mem.status = "spawn for dep";
                     return;
                 }
             }
@@ -75,6 +81,7 @@ module.exports = {
                 if (h < 0) {
                     //spawn harvester
                     moduleSpawn.addSpawnList(Game.rooms[ops.source], "harvester", {troom: ops.target});
+                    ops.mem.status = "spawn for min";
                     return;
                 }
             }
@@ -87,12 +94,14 @@ module.exports = {
             if (h < 0) {
                 //spawn harvester
                 moduleSpawn.addSpawnList(Game.rooms[ops.source], "harvester", {troom: ops.target});
+                ops.mem.status = "spawn for src";
                 return;
             }
         }
         
         //no harvester exist and nothing to harvest - wait
         ops.mem.timeout = Game.time + this.core_timeout;
+        ops.mem.status = "idle no task";
     }, 
     
     attackTimeout: function(ops)
@@ -101,6 +110,7 @@ module.exports = {
         if (roomhvstr.length > 0) {
             ops.mem.timeout = Game.time + this.attack_timeout;
             var msg = "Ops." + ops.type + "(" + ops.target + "): attack on harvester detected. Pausing...";
+            ops.mem.status = "idle attack";
             Game.notify(msg);
             return true;
         }
@@ -113,5 +123,6 @@ module.exports = {
         if (ops.mem.init) return;
         ops.mem.init = true;
         ops.mem.timeout = 0;
+        ops.mem.status = "idle";
     }
 };

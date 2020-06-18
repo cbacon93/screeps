@@ -92,12 +92,14 @@ module.exports = {
     
     autoHarvest: function(ops)
     {
+        var room = Game.rooms[ops.source];
         for (var i in Memory.intel.list) {
             var intel = Memory.intel.list[i];
             if (intel.threat != "none") continue;
             
             var dist = Game.map.getRoomLinearDistance(ops.source, intel.name, true);
-            if (dist <= 1) 
+            if (dist <= 1 || 
+                room.controller.level >= 6 && dist <= 5 && intel.deposits) 
             {
                 //source and mineral ops
                 //check if no harvest ops exist

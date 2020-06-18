@@ -97,11 +97,12 @@ module.exports = {
             }
             
             //switch to special mode if container storage full
-            if (link.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && container)
+            if (container && 
+                source.energy == 0 && 
+                link.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && 
+                container.store.getUsedCapacity(RESOURCE_ENERGY) > LINK_CAPACITY)
             {
-                if (container.store.getUsedCapacity(RESOURCE_ENERGY) > LINK_CAPACITY) {
-                    creep.memory.containerLinkPurge = true;
-                }
+                creep.memory.containerLinkPurge = true;
             }
             
             if (ret == OK) {
