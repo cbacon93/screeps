@@ -257,7 +257,7 @@ module.exports = {
     },
     
     
-    getNewTasks: function(room, capacity)
+    getNewTasks: function(room, capacity, nearpos = null)
     {
         if (room.memory.ltasks_upd) {
             this.updateTaskList(room);
@@ -265,8 +265,22 @@ module.exports = {
         }
         
         var tasks = _.sortBy(room.memory.ltasks, (s) => -s.vol+s.acc+s.utx-s.prio*2000);
+        var task;
         
-        var task = _.find(tasks, (s) => { return s.vol-s.acc-s.utx > 0;});
+        if (nearpos == null) {
+            task = _.find(tasks, (s) => { return s.vol-s.acc-s.utx > 0;});
+        } else {
+            task = _.find(tasks, (s) => { 
+                if (s.vol-s.acc-s.utx <= 0) return false;
+                let src = Game.getObjectById(s.src);
+                if (!src) return false;
+                let dist = src.pos.getRangeTo(nearpos);
+                if (dist < 4) {
+                    return true;
+                }
+                return false;
+            });
+        }
         //var task = _.find(tasks, (s) => { return s.acc== 0 && s.utx == 0;});
         
         if (task) {
@@ -281,7 +295,17 @@ module.exports = {
             amount = Math.max(amount, 0);
             
             room.memory.ltasks[task.id].acc += amount;
-            return [ {id: task.id, vol: amount, utx: 0} ];
+            
+            var ret = [ {id: task.id, vol: amount, utx: 0} ];
+            
+            //find additional tasks
+            if (nearpos == null && capacity-amount > 10) {
+                let src = Game.getObjectById(task.src);
+                let tsk2 = this.getNewTasks(room, capacity-amount, src.pos);
+                ret = [].concat(ret, tsk2);
+            }
+            
+            return ret;
         }
         
         return [];

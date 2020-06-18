@@ -20,6 +20,14 @@ module.exports = {
 	    return result;
 	},
 	
+	pickupNearResource: function(creep)
+	{
+		let res = creep.pos.findInRange(FIND_DROPPED_RESOURCES, 1);
+		if (res.length > 0) {
+			creep.pickup(res[0]);
+		}
+	}, 
+	
 	
 	pickEnergySource: function(creep) 
     {
@@ -38,7 +46,8 @@ module.exports = {
         {
 	        creep.memory.source = c.id;
 	    } else {
-		    var s = creep.pos.findClosestByPath(FIND_SOURCES);
+		    var s = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, 
+				{filter: (r) => r.resourceType == RESOURCE_ENERGY && r.amount >= 20});
 		    if (s) {
 		    	creep.memory.source = s.id;
 		    }
@@ -51,8 +60,8 @@ module.exports = {
 		var source = Game.getObjectById(creep.memory.source);
         if (!source) { delete creep.memory.source; return; }
         
-        if (source instanceof Source) {
-	        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        if (source instanceof Resource) {
+	        if(creep.pickup(source) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, {range: 1, visualizePathStyle: {stroke: '#ff0000'}});
             }
         }

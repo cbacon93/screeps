@@ -348,10 +348,25 @@ module.exports = {
 	confusionDropoff: function(creep)
 	{
 		var target = creep.room.storage || creep.room.terminal;
+		var res_types = baseCreep.getStoredResourceTypes(creep.store);
 		if (target) {
-			var res_types = baseCreep.getStoredResourceTypes(creep.store);
 			creep.transfer(target, res_types[0]);
 			creep.moveTo(target);
+			return;
+		}
+		
+		//look for other places - spawn or extensions
+		var targets = creep.room.find(FIND_STRUCTURES, 
+			{filter: (s) => (s.structureType == STRUCTURE_CONTAINER || 
+				s.structureType == STRUCTURE_SPAWN || 
+				s.structureType == STRUCTURE_EXTENSION) && 
+				s.store.getFreeCapacity(res_types[0]) > 0
+			}
+		);
+		
+		if (targets.length > 0) {
+			creep.transfer(targets[0], res_types[0]);
+			creep.moveTo(targets[0]);
 		}
 	},
 	

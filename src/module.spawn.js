@@ -36,15 +36,16 @@ module.exports = {
             minerMultiplyer = 2;
         }
         
-        if (minerCount < sourceCount*minerMultiplyer+extractor_count && 
-            !spawn.room.memory.attacked)
-        {
-            this.spawn(spawn, "miner");
-        } else
-        if (haulerCount < room.memory.stats.haulers_needed) 
+        if (haulerCount < room.memory.stats.haulers_needed && 
+            minerCount >= 1) 
         {
             this.spawn(spawn, "hauler");
         } else 
+        if (minerCount < sourceCount*minerMultiplyer+extractor_count && 
+            !spawn.room.memory.attacked)
+        {
+            this.spawn(spawn, "miner", {troom: room.name});
+        } else
         if (upgraderCount < 1)
         {
             this.spawn(spawn, "upgrader");
