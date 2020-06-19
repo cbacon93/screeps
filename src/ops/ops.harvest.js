@@ -61,7 +61,10 @@ module.exports = {
         }
         
         // EXISTING HARVESTER
-        var roomhvstr = _.filter(Memory.creeps, (s) => s.role == "harvester" && s.troom == ops.target);
+        var roomhvstr = _.filter(
+            Memory.creeps, 
+            (s) => (s.role == "harvester" || s.role == "miner") && s.troom == ops.target
+        );
         
         // DEPOSITS AND MINERALS ONLY ON >LVL 6 SOURCE ROOMS
         if (Game.rooms[ops.source].controller.level >= 6) {
@@ -93,7 +96,7 @@ module.exports = {
             let h = _.findIndex(roomhvstr, (s) => s.source_type == 'source' );
             if (h < 0) {
                 //spawn harvester
-                moduleSpawn.addSpawnList(Game.rooms[ops.source], "harvester", {troom: ops.target});
+                moduleSpawn.addSpawnList(Game.rooms[ops.source], "miner", {troom: ops.target});
                 ops.mem.status = "spawn for src";
                 return;
             }
@@ -106,7 +109,7 @@ module.exports = {
     
     attackTimeout: function(ops)
     {
-        var roomhvstr = _.filter(Memory.creeps, (s) => s.role == "harvester" && s.troom == ops.target && s.attacked_time+this.sleep_timeout > Game.time);
+        var roomhvstr = _.filter(Memory.creeps, (s) => (s.role == "harvester" || s.role == "miner") && s.troom == ops.target && s.attacked_time+this.sleep_timeout > Game.time);
         if (roomhvstr.length > 0) {
             ops.mem.timeout = Game.time + this.attack_timeout;
             var msg = "Ops." + ops.type + "(" + ops.target + "): attack on harvester detected. Pausing...";

@@ -18,8 +18,13 @@ module.exports = {
         baseCreep.init(creep);
         creep.memory.noRenew = true;
         
+        //just to cover the upgrade - to be removed
+        if (!creep.memory.troom) {
+            creep.memory.troom = creep.memory.home;
+        }
+        
         //go to mining room
-        if (creep.memory.troom && creep.memory.troom != creep.room.name) {
+        if (creep.memory.troom != creep.room.name) {
             baseCreep.moveToRoom(creep, creep.memory.troom);
             return;
         }
@@ -47,11 +52,39 @@ module.exports = {
     {
         //source depleted - time to renew?
         if (source instanceof Source) {
-            if (source.energy == 0 && creep.ticksToLive <= ENERGY_REGEN_TIME+creep.memory.travelTime) {
-                creep.memory.renewSelf = true;
-                creep.memory.killSelf = true;
-                creep.memory.role = "miner_old";
+            
+            if (creep.memory.troom == creep.memory.home) 
+            {
+                //home miner: recycle self
+                if (source.energy == 0 && creep.ticksToLive <= ENERGY_REGEN_TIME+creep.memory.travelTime) 
+                {
+                        //home mining: miner should recycle self
+                        creep.memory.renewSelf = true;
+                        creep.memory.killSelf = true;
+                        creep.memory.role = "miner_old";
+                }
+            } 
+            else 
+            {
+                //distant miner: spawn reinforcement
+                if (creep.ticksToLive <= creep.memory.travelTime) 
+                {
+                    if (!creep.memory.reinforcement_spawned) 
+                    {
+                        creep.memory.reinforcement_spawned = true;
+                        moduleSpawn.addSpawnList(
+                            Game.rooms[creep.memory.home], 
+                            "miner", 
+                            {
+                                troom: creep.memory.troom, 
+                                source: creep.memory.source, 
+                                source_type: creep.memory.source_type
+                            }
+                        );
+                    }
+                }
             }
+            creep.memory.source_type = "source";
         }
         
         //mineral depleted - kill self
@@ -59,7 +92,13 @@ module.exports = {
             if (source.mineralAmount == 0 && source.ticksToRegeneration >= 3600) {
                 creep.memory.killSelf = true;
                 creep.memory.renewSelf = true;
+            } else 
+            if (source.mineralAmount > 0 && creep.ticksToLive <= creep.memory.travelTime) {
+                creep.memory.killSelf = true;
+                creep.memory.renewSelf = true;
+                creep.memory.role = "miner_old";
             }
+            creep.memory.source_type = "mineral";
         }
     }, 
     
@@ -67,11 +106,11 @@ module.exports = {
     {
         if (source instanceof Source && 
             source.energy == 0)
-        {            
+        {    
+            baseCreep.pickupNearResource(creep);
+                    
             if (!container)
-            {
-                baseCreep.pickupNearResource(creep);
-                
+            {    
                 let csites = source.pos.findInRange(
                     FIND_CONSTRUCTION_SITES, 
                     2, 
@@ -103,6 +142,8 @@ module.exports = {
                         creep.moveTo(container, {range: 1, visualizePathStyle: {stroke: '#00ff00'}});
                     }
                     return true;
+                } else {
+                    creep.transfer(container, RESOURCE_ENERGY);
                 }    
             }
         }
@@ -121,9 +162,7 @@ module.exports = {
             //save travel time
             if (!creep.memory.travelTime) {
                 let time = CREEP_LIFE_TIME - creep.ticksToLive;
-                time *= 1.25;
-                time += 50;
-                time = Math.round(time);
+                time += 10;
                 creep.memory.travelTime = time;
             }
         }

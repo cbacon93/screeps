@@ -139,6 +139,12 @@ module.exports = {
 	
 	dropoff: function(creep, task, taskmem) 
 	{
+		//move to home room for dropoff
+		if (creep.room.name != creep.memory.home) {
+			baseCreep.moveToRoom(creep, creep.memory.home);
+			return;
+		}
+		
 		//pick energy receiver
 		if (!creep.memory.target) {
 			this.pickReceiver(creep, task);
@@ -148,12 +154,6 @@ module.exports = {
 		var target = Game.getObjectById(creep.memory.target);
 		if (target) 
 		{
-			//move to room
-			if (target.room.name != creep.room.name) {
-				baseCreep.moveToRoom(creep, target.room.name);
-				return;
-			}
-			
 			//select resource for transfer
 			var resource = task.res || RESOURCE_ENERGY;
 			var amount_avbl = creep.store[resource];
