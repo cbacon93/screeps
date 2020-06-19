@@ -94,8 +94,7 @@ module.exports = {
                 // valid room found - start claim ops
                 if (bestroom) {
                     Ops.new("claim", ops.source, bestroom);
-                    Game.notify(ops.source + ": Autoclaim on " + bestroom);
-                    console.log(ops.source + ": Autoclaim on " + bestroom);
+                    Debug.notify(ops.source, "ops.room_lifetime", "Autoclaim on " + bestroom);
                     return true;
                 }
                 

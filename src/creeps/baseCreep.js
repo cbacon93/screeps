@@ -245,7 +245,7 @@ module.exports = {
 			nwork=Math.ceil(0.5*bodySize);
 			ncarry=bodySize;
 			nmove=Math.ceil(1.5*bodySize);
-		}
+		} else 
 		if (role == 'healer')
 		{
 			bodySize = Math.min(bodySize, 25);
@@ -253,6 +253,12 @@ module.exports = {
 			ncarry = 0;
 			nmove= bodySize; //50
 			nheal = bodySize; //250
+		} else 
+		if (role == 'groupTest')
+		{
+			work=0;
+			carry=0;
+			move=1;
 		}
 		//upgrader && builder == standard
 		

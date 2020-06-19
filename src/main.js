@@ -25,6 +25,7 @@ var roleDismantler = require('creeps_role.dismantler');
 var roleHealer = require('creeps_role.healer');
 var roleRenewSelf = require('creeps_role.renewSelf');
 var roleBoostSelf = require('creeps_role.boostSelf');
+var roleGroupTest = require('creeps_role.groupTest');
 
 var moduleStats = require('module.stats');
 
@@ -97,7 +98,6 @@ module.exports.loop = function () {
         for(var name in Game.creeps) {
             var creep = Game.creeps[name];
             
-            //try {
                 if (creep.memory.renewSelf) {
         	        roleRenewSelf.run(creep);
                 } else if (creep.memory.boostSelf) {
@@ -117,23 +117,21 @@ module.exports.loop = function () {
                 } else if (creep.memory.role == 'pioneer') {
                     rolePioneer.run(creep);
                 } else if (creep.memory.role == 'claimer') {
-                   roleClaimer.run(creep);
+                    roleClaimer.run(creep);
                 } else if (creep.memory.role == 'reserver') {
-                   roleReserver.run(creep);
+                    roleReserver.run(creep);
                 } else if (creep.memory.role == 'soldier') {
-                   roleSoldier.run(creep);
+                    roleSoldier.run(creep);
                 } else if (creep.memory.role == 'drainer') {
-                   roleDrainer.run(creep);
+                    roleDrainer.run(creep);
                 } else if (creep.memory.role == 'dismantler') {
-                   roleDismantler.run(creep);
-               } else if (creep.memory.role == 'healer') {
-                   roleHealer.run(creep);
+                    roleDismantler.run(creep);
+                } else if (creep.memory.role == 'healer') {
+                    roleHealer.run(creep);
+                } else if (creep.memory.role == 'groupTest') {
+                    roleGroupTest.run(creep);
                 }
-            /*}
-            catch(err)
-            {
-                console.log(err.message);
-            }*/
+
             
             if (creep.ticksToLive <= 100 && !creep.memory.noRenew)
             {
