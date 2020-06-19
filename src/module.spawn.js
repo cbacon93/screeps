@@ -12,6 +12,7 @@ module.exports = {
         var upgraderCount = counts.upgrader || 0;
         var builderCount = counts.builder || 0;
         var haulerCount = counts.hauler || 0;
+        var queenCount = counts.queen || 0;
         
         var sourceCount = room.find(FIND_SOURCES).length;
         var mineralCount = room.find(FIND_MINERALS, {
@@ -43,6 +44,10 @@ module.exports = {
             minerCount >= 1) 
         {
             this.spawn(spawn, "hauler");
+        } else 
+        if (queenCount < 1 && linkCount >= 2) 
+        {
+            this.spawn(spawn, "queen");
         } else 
         if (minerCount < sourceCount*minerMultiplyer+extractor_count && 
             !spawn.room.memory.attacked)

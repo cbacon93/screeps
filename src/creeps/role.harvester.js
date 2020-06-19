@@ -81,7 +81,7 @@ module.exports = {
                 
                 // ABORT CONDITIONS
                 if (source instanceof Deposit) {
-                    if (source.lastCooldown > 30) {
+                    if (source.lastCooldown > 60) {
                         creep.memory.killSelf = true; //kill on next renew
                     }
                 } else 

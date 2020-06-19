@@ -117,7 +117,7 @@ module.exports = {
             
             var dist = Game.map.getRoomLinearDistance(ops.source, intel.name, true);
             if (dist <= 1 || 
-                room.controller.level >= 6 && dist <= 5 && intel.deposits) 
+                room.controller.level >= 6 && dist <= 8 && intel.deposits) 
             {
                 //source and mineral ops
                 //check if no harvest ops exist

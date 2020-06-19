@@ -259,6 +259,12 @@ module.exports = {
 			nwork=0;
 			ncarry=0;
 			nmove=1;
+		} else 
+		if (role == 'queen')
+		{
+			nwork=0;
+			ncarry=2;
+			nmove=1;
 		}
 		//upgrader && builder == standard
 		
@@ -375,14 +381,8 @@ module.exports = {
             {
                 if (link.transferEnergy(spawnlink) == OK) 
 				{
-					var amt = Math.round(link.store[RESOURCE_ENERGY] * (1-LINK_LOSS_RATIO));
-					moduleLogistics.addTransportTask(link.room, spawnlink, link.room.storage, amt, RESOURCE_ENERGY, 7, "l");
 					return true;
 				}
-            } else {
-                //console.log("Spawnlink full");
-				var amt = spawnlink.store[RESOURCE_ENERGY];
-				moduleLogistics.addTransportTask(link.room, spawnlink, link.room.storage, amt, RESOURCE_ENERGY, 7, "l");
             }
         }
         return false;

@@ -100,7 +100,17 @@ module.exports = {
 		//creep.say("p: " + ret);
 
 		if (ret  == ERR_NOT_IN_RANGE) {
-			creep.moveTo(s, {visualizePathStyle: {stroke: '#ff0000'}});
+			let mvret = creep.moveTo(s, {visualizePathStyle: {stroke: '#ff0000'}});
+			
+			if (mvret == ERR_NO_PATH) {
+				creep.memory.errnopathcount++;
+			} else {
+				creep.memory.errnopathcount = 0;
+			}
+			
+			if (creep.memory.errnopathcount >= 15) {
+				
+			}
 		}
 		
 		

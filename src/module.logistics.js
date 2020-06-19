@@ -405,6 +405,11 @@ module.exports = {
             return;
         }
         
+        if (task.type == "l") {
+            this.deleteTask(room, taskid);
+            return;
+        }
+        
         //check acc and utx
         //todo...
     }, 

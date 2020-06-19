@@ -152,6 +152,13 @@ module.exports = {
         //HARVEST
         if(creep.harvest(source) != OK) {
             creep.moveTo(source, {range: 1, visualizePathStyle: {stroke: '#ff0000'}});
+            
+            //link full, send to spawn
+            if (link && (link.store.getFreeCapacity(RESOURCE_ENERGY) == 0 || creep.memory.renewSelf)) {
+                baseCreep.sendLinkToSpawn(link);
+            }
+            
+            return;
         } else {
             //save travel time
             if (!creep.memory.travelTime) {
@@ -217,7 +224,7 @@ module.exports = {
             container && 
             source.energy == 0 && 
             link.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && 
-            container.store.getUsedCapacity(RESOURCE_ENERGY) > LINK_CAPACITY)
+            container.store.getUsedCapacity(RESOURCE_ENERGY) > 0)
         {
             creep.memory.containerLinkPurge = true;
         }

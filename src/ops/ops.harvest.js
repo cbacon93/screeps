@@ -75,7 +75,7 @@ module.exports = {
         // DEPOSITS AND MINERALS ONLY ON >LVL 6 SOURCE ROOMS
         if (Game.rooms[ops.source].controller.level >= 6) {
             // PICK Deposits
-            if (intel.deposits && intel.deposits_cooldown < 20) {
+            if (intel.deposits && intel.deposits_cooldown < 30) {
                 let h = _.findIndex(roomhvstr, (s) => s.source_type == 'deposit' );
                 if (h < 0) {
                     //spawn harvester

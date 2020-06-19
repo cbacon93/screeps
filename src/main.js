@@ -26,6 +26,7 @@ var roleHealer = require('creeps_role.healer');
 var roleRenewSelf = require('creeps_role.renewSelf');
 var roleBoostSelf = require('creeps_role.boostSelf');
 var roleGroupTest = require('creeps_role.groupTest');
+var roleQueen = require('creeps_role.queen');
 
 var moduleStats = require('module.stats');
 
@@ -130,6 +131,8 @@ module.exports.loop = function () {
                     roleHealer.run(creep);
                 } else if (creep.memory.role == 'groupTest') {
                     roleGroupTest.run(creep);
+                } else if (creep.memory.role == 'queen') {
+                    roleQueen.run(creep);
                 }
 
             

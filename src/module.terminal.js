@@ -3,13 +3,6 @@ module.exports = {
     {
         var res_types = baseCreep.getStoredResourceTypes(room.terminal.store);
         
-        //request Energy
-        if (room.terminal.store[RESOURCE_ENERGY] < 3000) {
-            let amount = 3000 - room.terminal.store[RESOURCE_ENERGY];
-            moduleLogistics.addTransportTask(room, room.storage, room.terminal, amount, RESOURCE_ENERGY);
-            return;
-        }
-        
         //cooldown check
         if (room.terminal.cooldown > 0) return;
         
