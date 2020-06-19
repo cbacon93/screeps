@@ -50,7 +50,11 @@ module.exports = {
     {
         var myrooms = _.filter(Game.rooms, (s) => s.controller && s.controller.my);
         if (myrooms.length < Game.gcl.level) 
-        {
+        {    
+            //abort if novice area
+            let rstatus = Game.map.getRoomStatus(ops.source);
+            if (myrooms.length >= 3 && rstatus.status == "novice") return;
+            
             //only claim if reached level 4 or higher
             var myroom = Game.rooms[ops.source];
             if (myroom.controller.level >= 4) 
