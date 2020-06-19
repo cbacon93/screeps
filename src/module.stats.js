@@ -110,7 +110,7 @@ module.exports =  {
             }
             
             room.memory.stats.transports_1k = volume;
-            room.memory.stats.transports_1k_30 = Math.round((room.memory.stats.transports_1k_30*29+volume)/30);
+            room.memory.stats.transports_1k_30 = Math.round((room.memory.stats.transports_1k_30*14+volume)/15);
             
             //calc haulers
             var currentBodySize = Math.min(baseCreep.getSuitableBodySize("", room.energyAvailable), 5);
