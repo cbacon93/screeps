@@ -127,13 +127,13 @@ module.exports = {
             let amount = lab.store[lab.mineralType] || 0;
             
             //start timer
-            if (mem.resource_request == 0) {
+            /*if (mem.resource_request == 0) {
                 mem.resource_request = Game.time;
             } else if (mem.resource_request + this.boost_timeout < Game.time) 
             {
                 //timeout - empty lab
                 mem.state = this.EMPTYING;
-            }
+            }*/
             
             
             //lab empty - reset
@@ -204,6 +204,13 @@ module.exports = {
         
         if (mem.is_producing) {
             mem.state = this.REACTION;
+        }
+    }, 
+    
+    stopWork: function(lab)
+    {
+        if (lab.room.memory.labs.labs[lab.id]) {
+            lab.room.memory.labs.labs[lab.id].state = this.EMPTYING;
         }
     }, 
     

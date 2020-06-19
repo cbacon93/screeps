@@ -1,6 +1,6 @@
 module.exports = {
     name: "dismantler",
-    boost: ['dismantle'],
+    boost: ['damage', 'heal', 'dismantle', 'fatigue'],
     
     run: function(creep)
     {
@@ -54,9 +54,12 @@ module.exports = {
                     creep.moveTo(target, {range: 1, visualizePathStyle: {stroke: '#ff0000'}});
                 }
             } else {
-                creep.memory.killSelf = true;
-                creep.memory.renewSelf = true;
-                delete creep.memory.troom;
+                if (creep.room.find(FIND_HOSTILE_STRUCTURES).length <= 0) 
+                {
+                    creep.memory.killSelf = true;
+                    creep.memory.renewSelf = true;
+                    delete creep.memory.troom;
+                }
             }
         }
         
