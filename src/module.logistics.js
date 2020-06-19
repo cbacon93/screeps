@@ -14,23 +14,6 @@ module.exports = {
         if (keys.length > checkid) {
             this.checkOpenTask(room, keys[checkid]);
         }
-        
-        //print debug
-        room.visual.text("Transport Tasks", 1, 1, {align: 'left'});
-        var i = 0;
-        for (var id in room.memory.ltasks) {
-            var task = room.memory.ltasks[id];
-            i++;
-            
-            room.visual.text(task.id, 1, 1+i, {align: 'left'});
-            room.visual.text(task.type, 5, 1+i, {align: 'left'});
-            room.visual.text(task.vol, 7, 1+i, {align: 'left'});
-            room.visual.text(task.res, 9, 1+i, {align: 'left'});
-            room.visual.text(task.acc, 13, 1+i, {align: 'left'});
-            room.visual.text(task.utx, 15, 1+i, {align: 'left'});
-            
-            
-        }
     }, 
     
     updateTaskList: function(room)

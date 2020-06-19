@@ -1,24 +1,37 @@
 module.exports = {
-    cycle_timeout: 30000,
+    scout_timeout: 30000,
+    harvest_timeout: 10000,
+    autoclaim_timeout: 10000,
+    
     run: function(ops)
     {
         this.init(ops);
         
-        // 30000 cycle timeout // 48h
-        if (ops.mem.cycle_timeout + this.cycle_timeout > Game.time) return;
-        ops.mem.cycle_timeout = Game.time;
-        
-        // SOURCE ROOM NOT AVBL - ABORT
-        if (Ops.checkSrcRoomAvbl(ops)) return;
-        
         //AUTO SCOUT
-        Ops.new("scout_vicinity", ops.source, "");
+        if (ops.mem.scout_timeout + this.scout_timeout <= Game.time) {
+            ops.mem.scout_timeout = Game.time;
+            if (Ops.checkSrcRoomAvbl(ops)) return;
+            Ops.new("scout_vicinity", ops.source, "");
+            return;
+        }
+        
         
         //AUTO CLAIM NEW ROOMS
-        this.autoClaim(ops);
+        if (ops.mem.autoclaim_timeout + this.autoclaim_timeout <= Game.time) {
+            ops.mem.autoclaim_timeout = Game.time;
+            if (Ops.checkSrcRoomAvbl(ops)) return;
+            this.autoClaim(ops);
+            return;
+        }
+        
         
         //AUTO HARVEST OPS
-        this.autoHarvest(ops);
+        if (ops.mem.harvest_timeout + this.harvest_timeout <= Game.time) {
+            ops.mem.harvest_timeout = Game.time;
+            if (Ops.checkSrcRoomAvbl(ops)) return;
+            this.autoHarvest(ops);
+            return;
+        }
     }, 
     
     
@@ -26,7 +39,9 @@ module.exports = {
     {
         if (ops.mem.init) return;
         ops.mem.init = true;
-        ops.mem.cycle_timeout = Game.time;
+        ops.mem.scout_timeout = Game.time;
+        ops.mem.harvest_timeout = Game.time;
+        ops.mem.autoclaim_timeout = Game.time;
 
     },
     

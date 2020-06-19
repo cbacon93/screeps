@@ -8,6 +8,7 @@ global.Terminal = require('module.terminal');
 global.Logistics = global.moduleLogistics;
 global.Intel = require('module.intel');
 global.moduleAutobuilder = require('module.autobuilder');
+global.Debug = require("module.debug");
 
 var roleMiner = require('creeps_role.miner');
 var roleHarvester = require('creeps_role.harvester');
@@ -140,10 +141,9 @@ module.exports.loop = function () {
             }
         }
         
+        Debug.run();
         
         //use rest of cpu
         moduleBasePosCalc.run();
-        
-        
     //});
 };

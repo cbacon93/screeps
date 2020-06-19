@@ -1,16 +1,18 @@
 module.exports = {
     sleep_timeout: 1000,
-    attack_timeout: 30000,
+    attack_timeout: 10000,
     core_timeout: 90000,
     run: function(ops)
     {
         this.init(ops);
         
+        //Attack pause
+        this.attackTimeout(ops);
+        
+        
         if (ops.mem.timeout + this.sleep_timeout > Game.time) return;
         ops.mem.timeout = Game.time;
         
-        //Attack pause
-        this.attackTimeout(ops);
         
         // OWN ROOM - SKIP
         if (Game.rooms[ops.target] && 
@@ -113,12 +115,13 @@ module.exports = {
     
     attackTimeout: function(ops)
     {
-        var roomhvstr = _.filter(Memory.creeps, (s) => (s.role == "harvester" || s.role == "miner") && s.troom == ops.target && s.attacked_time+this.sleep_timeout > Game.time);
+        var roomhvstr = _.filter(Memory.creeps, (s) => s.troom == ops.target && (s.role == "harvester" || s.role == "miner") && s.attacked_time+this.sleep_timeout > Game.time);
         if (roomhvstr.length > 0) {
             ops.mem.timeout = Game.time + this.attack_timeout;
             var msg = "Ops." + ops.type + "(" + ops.target + "): attack on harvester detected. Pausing...";
             ops.mem.status = "idle attack";
             Game.notify(msg);
+            console.log(msg);
             return true;
         }
         return false;

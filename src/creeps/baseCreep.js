@@ -508,7 +508,10 @@ module.exports = {
 			
 			if (walls.length > 0 && Memory.intel.list[r] && !Memory.intel.list[r].blocked) {
 				Memory.intel.list[r].blocked = true;
-				Game.notify(creep.name + ": couldnt find way through room " + creep.room.name + " and marked as blocked");
+				let msg = creep.name + ": couldnt find way through room " + creep.room.name + " and marked as blocked";
+				Game.notify(msg);
+				console.log(msg);
+				
 				delete creep.memory.roomPath;
 			}
 		}
