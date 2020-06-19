@@ -10,9 +10,9 @@ module.exports = {
         
         //end of life recycle
         if (creep.memory.pickup && creep.ticksToLive <= 10) {
-            creep.role = "queen_old";
-            creep.renewSelf = true;
-            creep.killSelf = true;
+            creep.memory.role = "queen_old";
+            creep.memory.renewSelf = true;
+            creep.memory.killSelf = true;
         }
         
         //move queen to center
