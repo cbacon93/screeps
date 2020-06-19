@@ -3,8 +3,11 @@ module.exports = {
         this.memCleanup();
         
         var room = spawn.room;
-        var roomCreeps = room.find(FIND_MY_CREEPS);
-        var counts = _.countBy(roomCreeps, 'memory.role');
+        var roomCreeps = _.filter(
+            Memory.creeps, 
+            (c) => c.home == room.name && (!c.troom || c.troom == room.name)
+        );
+        var counts = _.countBy(roomCreeps, 'role');
         var minerCount = counts.miner || 0;
         var upgraderCount = counts.upgrader || 0;
         var builderCount = counts.builder || 0;

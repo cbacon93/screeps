@@ -18,11 +18,6 @@ module.exports = {
         baseCreep.init(creep);
         creep.memory.noRenew = true;
         
-        //just to cover the upgrade - to be removed
-        if (!creep.memory.troom) {
-            creep.memory.troom = creep.memory.home;
-        }
-        
         //go to mining room
         if (creep.memory.troom != creep.room.name) {
             baseCreep.moveToRoom(creep, creep.memory.troom);
