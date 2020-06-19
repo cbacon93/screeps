@@ -180,6 +180,7 @@ module.exports = {
             }
             
             if (ret == OK) {
+                baseCreep.pickupNearResource(creep);
                 return;
             }
         }

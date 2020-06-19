@@ -11,6 +11,17 @@ module.exports = {
         creep.moveTo(target);
     }, 
     
+    moveLeader: function(creep, target, opts) {
+        let follower = creep.pos.findInRange(FIND_MY_CREEPS, 1, {filter: (c) => c.memory.grp_lead == creep.id});
+        if (!creep.memory.grp_follow || 
+            follower.length >= creep.memory.grp_follow.length)
+        {
+            creep.moveTo(target, opts);
+        } else {
+            this.checkFollower(creep);
+        }
+    }, 
+    
     
     addFollower: function(leader, follower)
     {

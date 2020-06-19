@@ -256,9 +256,9 @@ module.exports = {
 		} else 
 		if (role == 'groupTest')
 		{
-			work=0;
-			carry=0;
-			move=1;
+			nwork=0;
+			ncarry=0;
+			nmove=1;
 		}
 		//upgrader && builder == standard
 		
