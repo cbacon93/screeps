@@ -72,6 +72,25 @@ module.exports = {
         //insert into production queue
         this.insertProductionQueue(room, base.a, base.b, res, amount);
         console.log(room.name + ": Producing " + res);
+    },
+    
+    stopProduction: function(room) 
+    {
+        if (!room.memory.labs.production || 
+            room.memory.labs.production.length <= 0) 
+        { return; }
+        
+        var prod = room.memory.labs.production[0];
+        if (!prod.started) { return; }
+        
+        prod.started = false;
+        var lab_c = Game.getObjectById(prod.lab_prod);
+        var lab_a = Game.getObjectById(prod.lab_a);
+        var lab_b = Game.getObjectById(prod.lab_b);
+        
+        Labs.Lab.stopWork(lab_a);
+        Labs.Lab.stopWork(lab_b);
+        Labs.Lab.stopWork(lab_c);
     }, 
     
     insertProductionQueue: function(room, res_a, res_b, res_prod, amount)
