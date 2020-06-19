@@ -152,7 +152,6 @@ module.exports = {
         //HARVEST
         if(creep.harvest(source) != OK) {
             creep.moveTo(source, {range: 1, visualizePathStyle: {stroke: '#ff0000'}});
-            return;
         } else {
             //save travel time
             if (!creep.memory.travelTime) {
