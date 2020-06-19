@@ -8,6 +8,14 @@ module.exports = {
         //ltasks = {prio, type:, src:, vol:, acc:, utx:, rec:, res:}
         //prio, type, source, total volume, accepted volume, under transport volume, [receiver], [resource type]
         
+        //check tasks
+        let keys = Object.keys(room.memory.ltasks);
+        let checkid = Game.time % 100;
+        if (keys.length > checkid) {
+            this.checkOpenTask(room, keys[checkid]);
+        }
+        
+        //print debug
         room.visual.text("Transport Tasks", 1, 1, {align: 'left'});
         var i = 0;
         for (var id in room.memory.ltasks) {
@@ -301,6 +309,10 @@ module.exports = {
             //find additional tasks
             if (nearpos == null && capacity-amount > 10) {
                 let src = Game.getObjectById(task.src);
+                if (!src) {
+                    this.deleteTask(room, task.id);
+                    return [];
+                }
                 let tsk2 = this.getNewTasks(room, capacity-amount, src.pos);
                 ret = [].concat(ret, tsk2);
             }
@@ -394,7 +406,25 @@ module.exports = {
     deleteTask: function(room, taskid)
     {
         delete room.memory.ltasks[taskid];
-    }
+    },
+    
+    checkOpenTask: function(room, taskid)
+    {
+        var task = this.getTask(room, taskid);
+        if (!task) return;
+        let src = Game.getObjectById(task.src);
+        let rec = Game.getObjectById(task.rec);
+        
+        if (!src && task.src != null || 
+            !rec && task.rec != null) 
+        {
+            this.deleteTask(room, taskid);
+            return;
+        }
+        
+        //check acc and utx
+        //todo...
+    }, 
     
     
 };

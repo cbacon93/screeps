@@ -49,7 +49,7 @@ profiler.registerObject(moduleStats, 'moduleStats');
 profiler.registerObject(moduleAutobuilder, 'moduleAutobuilder');
 profiler.registerObject(moduleDefense, 'moduleDefense');*/
 
-if (!MODE_SIMULATION) console.log("reset detected");
+if (!Game.rooms.sim) console.log("reset detected");
 
 //profiler.enable();
 module.exports.loop = function () {

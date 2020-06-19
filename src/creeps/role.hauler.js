@@ -34,7 +34,7 @@ module.exports = {
             creep.memory.pickup = true;
 			
 			//pick new task
-			creep.memory.tasks = Logistics.getNewTasks(creep.room, creep.store.getCapacity());
+			creep.memory.tasks = Logistics.getNewTasks(Game.rooms[creep.memory.home], creep.store.getCapacity());
 			creep.memory.task_ptr = 0;
         }
 		
@@ -42,14 +42,11 @@ module.exports = {
 		if (creep.memory.tasks.length > 0) 
 		{
 			var taskmem = creep.memory.tasks[creep.memory.task_ptr];
-			var task = Logistics.getTask(creep.room, taskmem.id);
+			var task = Logistics.getTask(Game.rooms[creep.memory.home], taskmem.id);
 			
 			if (!task) {
 				this.removeTask(creep, taskmem.id);
-				if (creep.memory.task_ptr >= creep.memory.tasks.length) {
-					creep.memory.task_ptr = 0;
-					creep.memory.pickup = !creep.memory.pickup;
-				}
+				this.processTaskProgress(creep);
 				return;
 			}
 			
@@ -76,8 +73,9 @@ module.exports = {
 		if (!s) { 
 			//console.log(creep.room.name + " " + creep.name + ": source invalid, delete task");
 			//console.log(JSON.stringify(task));
-			Logistics.deleteTask(creep.room, task.id);
+			Logistics.deleteTask(Game.rooms[creep.memory.home], task.id);
 			this.removeTask(creep, task.id);
+			this.processTaskProgress(creep);
 			return; 
 		}
 		
@@ -107,10 +105,10 @@ module.exports = {
 		
 		
 		//successful
-		if (ret == OK) {
+		if (ret == OK || ret == ERR_FULL) {
 			taskmem.utx += amount;
-			Logistics.markPickup(creep.room, task.id, taskmem.vol, amount);
-			this.nextTask(creep, task);
+			Logistics.markPickup(Game.rooms[creep.memory.home], task.id, taskmem.vol, amount);
+			this.nextTask(creep);
 			this.savePickup(creep, amount, task.id);
 
 			//creep will be full - switch to dropoff
@@ -129,13 +127,10 @@ module.exports = {
 					return;
 				}
 				
-				Logistics.deleteTask(creep.room, task.id);
+				Logistics.deleteTask(Game.rooms[creep.memory.home], task.id);
 				
 				this.removeTask(creep, task.id);
-				if (creep.memory.task_ptr >= creep.memory.tasks.length) {
-					creep.memory.task_ptr = 0;
-					creep.memory.pickup = !creep.memory.pickup;
-				}
+				this.processTaskProgress(creep);
 				//console.log(creep.room.name + " " + creep.name + ": wrong numbers, deleted task " + task.type);
 			}
 		}
@@ -181,7 +176,7 @@ module.exports = {
 			//transfer complete - search new target
 			if (ret == OK) 
 			{
-				Logistics.markDropoff(creep.room, task.id, amount);
+				Logistics.markDropoff(Game.rooms[creep.memory.home], task.id, amount);
 				delete creep.memory.target;
 				
 				if (task.rec != null) {
@@ -305,14 +300,19 @@ module.exports = {
 		}
 	}, 
 	
-	nextTask: function(creep, task)
+	nextTask: function(creep)
 	{
 		creep.memory.task_ptr++;
+		this.processTaskProgress(creep);
+	},
+	
+	processTaskProgress: function(creep)
+	{
 		if (creep.memory.task_ptr >= creep.memory.tasks.length) {
 			creep.memory.pickup = !creep.memory.pickup;
 			creep.memory.task_ptr = 0;
 		}
-	},
+	}, 
 	
 	getTaskMem: function(creep, taskid)
 	{
@@ -331,7 +331,7 @@ module.exports = {
 			//all tasks not started
 			if (taskmem.vol > 0 && taskmem.utx == 0)
 			{
-				Logistics.markCancel(creep.room, taskmem.id, taskmem.vol);
+				Logistics.markCancel(Game.rooms[creep.memory.home], taskmem.id, taskmem.vol);
 				taskmem.vol = 0;
 			}
 		}
@@ -389,7 +389,7 @@ module.exports = {
 		if (is_amount != should_amount) {
 			//console.log(creep.room.name + " " + creep.name + ": Pickup Check detected wrong pickup");
 			var taskid = creep.memory.previous_taskid;
-			var task = Logistics.getTask(creep.room, taskid);
+			var task = Logistics.getTask(Game.rooms[creep.memory.home], taskid);
 			var taskmem = this.getTaskMem(creep, taskid);
 			var delta = is_amount - should_amount;
 			

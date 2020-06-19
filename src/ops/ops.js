@@ -47,6 +47,10 @@ module.exports = {
     
     new: function(type, source, target, mem={}) 
     {
+        if (!Memory.ops) {
+            Memory.ops = [];
+        }
+        
         Memory.ops.push({type: type, source: source, target: target, finished: false, mem: mem});
     },
     

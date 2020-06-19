@@ -5,3 +5,4 @@ ScreepsAutocomplete
 .tern-project
 dist
 .jshintrc
+.DS_Store

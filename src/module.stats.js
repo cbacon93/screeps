@@ -106,7 +106,7 @@ module.exports =  {
         if (Game.time % 1000 == 9) {
             if (!room.memory.stats.transports_1k_30) {
                 room.memory.stats.transports_1k_30 = volume;
-                room.memory.stats.haulers_needed = 1;
+                room.memory.stats.haulers_needed = 2;
             }
             
             room.memory.stats.transports_1k = volume;

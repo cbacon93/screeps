@@ -72,7 +72,7 @@ module.exports = {
             {
                 baseCreep.pickupNearResource(creep);
                 
-                let csties = source.pos.findInRange(
+                let csites = source.pos.findInRange(
                     FIND_CONSTRUCTION_SITES, 
                     2, 
                     {filter: (s) => s.structureType == STRUCTURE_CONTAINER}
@@ -162,10 +162,11 @@ module.exports = {
             }
             
             if (!link) {
-                this.addContainerTransportTask(container);
+                this.addContainerTransportTask(creep, container);
             }
             
             if (ret == OK) {
+                baseCreep.pickupNearResource(creep);
                 return;
             }
         }
@@ -361,15 +362,20 @@ module.exports = {
         }
     },
     
-    addContainerTransportTask: function(container)
+    addContainerTransportTask: function(creep, container)
     {
+        //hauler vicinity check
+        //avoids task volume errors
+        var nearhaulers = container.pos.findInRange(FIND_MY_CREEPS, 1, {filter: (c) => c.memory.rome == "hauler"});
+        if (nearhaulers.length > 0) return;
+        
         var res_types = baseCreep.getStoredResourceTypes(container.store);
         res_types = _.sortBy(res_types, (r) => -container.store.getUsedCapacity(r));
         if (res_types.length > 0 && 
             container.store.getUsedCapacity(res_types[0]) >= 200) 
         {
             Logistics.addTransportTask(
-                container.room, 
+                Game.rooms[creep.memory.home], 
                 container.id, 
                 null, 
                 container.store.getUsedCapacity(res_types[0]), 
