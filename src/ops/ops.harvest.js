@@ -100,7 +100,7 @@ module.exports = {
         // Pick Source
         if (intel.sources > 0 && path.length <= 1) {
             let h = _.findIndex(roomhvstr, (s) => s.source_type == 'source' );
-            if (h < 0) {
+            if (h < intel.sources) {
                 //spawn harvester
                 moduleSpawn.addSpawnList(Game.rooms[ops.source], "miner", {troom: ops.target});
                 ops.mem.status = "spawn for src";
