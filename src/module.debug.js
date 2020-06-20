@@ -6,6 +6,7 @@ module.exports = {
         let room = Game.rooms[Memory.debug];
         if (room) {
             this.drawLogistics(room);
+            this.drawOps(room);
         }
     }, 
     
@@ -49,6 +50,28 @@ module.exports = {
             room.visual.text(task.utx, 15, 1+i, {align: 'left'});
             
             
+        }
+    }, 
+    
+    drawOps: function(room)
+    {
+        var ops = _.filter(Memory.ops, (o) => o.source == room.name);
+        
+        room.visual.text("Ops", 35, 1, {align: 'left'});
+        i=0;
+        for (var j in ops) {
+            i++;
+            room.visual.text(ops[j].type, 35, 1+i, {align: 'left'});
+            room.visual.text(ops[j].target, 40, 1+i, {align: 'left'});
+            
+            if (ops[j].type == 'harvest') {
+                room.visual.text(Game.time - ops[j].mem.timeout, 43, 1+i, {align: 'left'});
+            }
+            if (ops[j].type == 'room_lifetime') {
+                room.visual.text(Game.time - ops[j].mem.scout_timeout, 43, 1+i, {align: 'left'});
+                room.visual.text(Game.time - ops[j].mem.harvest_timeout, 45, 1+i, {align: 'left'});
+                room.visual.text(Game.time - ops[j].mem.autoclaim_timeout, 47, 1+i, {align: 'left'});
+            }
         }
     }
 };

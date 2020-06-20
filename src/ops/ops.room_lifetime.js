@@ -40,8 +40,8 @@ module.exports = {
         if (ops.mem.init) return;
         ops.mem.init = true;
         ops.mem.scout_timeout = Game.time;
-        ops.mem.harvest_timeout = Game.time;
-        ops.mem.autoclaim_timeout = Game.time;
+        ops.mem.harvest_timeout = Game.time + 5000;
+        ops.mem.autoclaim_timeout = Game.time + 5000;
 
     },
     

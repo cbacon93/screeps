@@ -1,6 +1,7 @@
 module.exports = {
     sleep_timeout: 1000,
     attack_timeout: 10000,
+    idle_timeout: 3000, 
     core_timeout: 90000,
     run: function(ops)
     {
@@ -99,8 +100,8 @@ module.exports = {
         
         // Pick Source
         if (intel.sources > 0 && path.length <= 1) {
-            let h = _.findIndex(roomhvstr, (s) => s.source_type == 'source' );
-            if (h < intel.sources) {
+            let h = _.filter(roomhvstr, (s) => s.source_type == 'source' );
+            if (h.length < intel.sources) {
                 //spawn harvester
                 moduleSpawn.addSpawnList(Game.rooms[ops.source], "miner", {troom: ops.target});
                 ops.mem.status = "spawn for src";
@@ -109,7 +110,7 @@ module.exports = {
         }
         
         //no harvester exist and nothing to harvest - wait
-        ops.mem.timeout = Game.time + this.core_timeout;
+        ops.mem.timeout = Game.time + this.idle_timeout;
         ops.mem.status = "idle no task";
     }, 
     
