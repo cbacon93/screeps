@@ -16,7 +16,7 @@ module.exports = {
                 room.terminal.store[res] < 30000 || 
                 res == RESOURCE_ENERGY) continue;
             
-            if (this.sellResource(room, res, 1000) > 0) return;
+            if (this.sellResource(room, res, 3000) > 0) return;
         }
         
         //buy resources

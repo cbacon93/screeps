@@ -70,7 +70,7 @@ module.exports = {
         if (!creep.room.terminal) return;
         var elevel = creep.room.terminal.store[RESOURCE_ENERGY];
         
-        if (elevel < 3000) {
+        if (elevel < 10000) {
             creep.withdraw(creep.room.storage, RESOURCE_ENERGY);
             creep.memory.pickup = false;
             creep.memory.target = creep.room.terminal.id;
