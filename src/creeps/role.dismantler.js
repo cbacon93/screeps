@@ -46,7 +46,8 @@ module.exports = {
             baseCreep.moveToRoom(creep, creep.memory.troom);
         } 
         else 
-        {            
+        {
+            creep.rangedMassAttack();            
             var target = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES);
             if (target) {
                 creep.say("⚔️");

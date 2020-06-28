@@ -41,7 +41,7 @@ module.exports = {
         if (link.store[RESOURCE_ENERGY] > 0) {
             creep.withdraw(link, RESOURCE_ENERGY);
             creep.memory.pickup = false;
-            creep.memory.target = creep.room.storage;
+            creep.memory.target = creep.room.storage.id;
             return true;
         }
     }, 
@@ -73,13 +73,13 @@ module.exports = {
         if (elevel < 3000) {
             creep.withdraw(creep.room.storage, RESOURCE_ENERGY);
             creep.memory.pickup = false;
-            creep.memory.target = creep.room.terminal;
+            creep.memory.target = creep.room.terminal.id;
             return true;
         }
         if (elevel > 30000) {
             creep.withdraw(creep.room.terminal, RESOURCE_ENERGY);
             creep.memory.pickup = false;
-            creep.memory.target = creep.room.storage;
+            creep.memory.target = creep.room.storage.id;
             return true;
         }
         

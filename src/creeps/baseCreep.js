@@ -551,7 +551,7 @@ module.exports = {
         if (spawns.length > 0)
         {
             var xx = spawns[0].renewCreep(creep);
-            if (xx == ERR_NOT_IN_RANGE) {
+            if (xx == ERR_NOT_IN_RANGE || xx == ERR_BUSY) {
                 creep.moveTo(spawns[0], {range: 1, visualizePathStyle: {stroke: '#0000ff'}});
             } else if (xx == ERR_FULL) {
 				creep.memory.embark = true;
